@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 const helmet = require('helmet')
+const cors = require('cors')
 const { NODE_ENV } = require('./config')
+const folderroute = require('./folders/folders-router')
+const noteroute = require('./notes/notes-router')
 
 
 const app = express()
@@ -14,7 +16,9 @@ const morganOption = (NODE_ENV === 'production')
 
 app.use(morgan(morganOption))
 app.use(helmet())
-
+app.use(cors())
+app.use('/folders',folderroute)
+app.use('/notes',noteroute)
 app.get('/', (req, res) => {
        res.send('Hello, world!')
      })
@@ -31,6 +35,6 @@ app.get('/', (req, res) => {
            res.status(500).json(response)
          })
 
-app.use(cors())
+
 
 module.exports = app
